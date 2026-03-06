@@ -3,50 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Reader Fix</title>
-    <style>
-        body { background: #6366f1; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        .card { background: white; padding: 2rem; border-radius: 20px; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        textarea { width: 100%; height: 100px; margin-bottom: 1rem; padding: 10px; box-sizing: border-box; border: 2px solid #ddd; border-radius: 10px; }
-        .btns { display: flex; gap: 10px; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        #speak { background: #6366f1; color: white; }
-        #stop { background: #ef4444; color: white; }
-    </style>
+    <title>Voice Reader Pro</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="card">
-        <textarea id="text">Hello! If you can hear this, the code is working.</textarea>
+        <h1>Voice Reader</h1>
+        <textarea id="text" placeholder="Type something..."></textarea>
+        
+        <div class="settings">
+            <select id="voice-select">
+                <option value="">Loading Voices...</option>
+            </select>
+        </div>
+
         <div class="btns">
             <button id="speak">Speak</button>
             <button id="stop">Stop</button>
         </div>
     </div>
-
-    <script>
-        const speakBtn = document.getElementById('speak');
-        const stopBtn = document.getElementById('stop');
-        const textInput = document.getElementById('text');
-        const synth = window.speechSynthesis;
-
-        function speak() {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-
-            if (textInput.value !== '') {
-                const utterance = new SpeechSynthesisUtterance(textInput.value);
-                
-                utterance.onend = () => { console.log("Finished speaking."); };
-                utterance.onerror = (err) => { console.error("Speech Error:", err); };
-
-                synth.speak(utterance);
-            }
-        }
-
-        speakBtn.addEventListener('click', speak);
-        stopBtn.addEventListener('click', () => synth.cancel());
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
