@@ -1,48 +1,44 @@
 const synth = window.speechSynthesis;
-const textInput = document.getElementById('text');
-const voiceSelect = document.getElementById('voice-select');
 const speakBtn = document.getElementById('speak');
-const stopBtn = document.getElementById('stop');
+const resetBtn = document.getElementById('reset');
+const textInput = document.getElementById('text');
+const statusDisplay = document.getElementById('status');
 
-let voices = [];
-
-function populateVoiceList() {
-    voices = synth.getVoices();
-    voiceSelect.innerHTML = '';
-    
-    voices.forEach((voice, i) => {
-        const option = document.createElement('option');
-        option.textContent = `${voice.name} (${voice.lang})`;
-        option.setAttribute('data-lang', voice.lang);
-        option.setAttribute('data-name', voice.name);
-        voiceSelect.appendChild(option);
-    });
+function updateStatus(msg) {
+    statusDisplay.textContent = msg;
+    console.log("Speech Status:", msg);
 }
 
-if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = populateVoiceList;
+function forceReset() {
+    synth.cancel();
+    updateStatus("Engine Reset");
 }
 
 function speak() {
-    if (synth.speaking) {
-        synth.cancel();
+    if (synth.paused) {
+        synth.resume();
     }
+    
+    synth.cancel();
 
-    if (textInput.value !== '') {
-        const utterance = new SpeechSynthesisUtterance(textInput.value);
-        const selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
-        
-        voices.forEach((voice) => {
-            if (voice.name === selectedOption) {
-                utterance.voice = voice;
-            }
-        });
+    const utterance = new SpeechSynthesisUtterance(textInput.value);
 
+    utterance.onstart = () => updateStatus("Speaking...");
+    utterance.onend = () => updateStatus("Finished");
+    utterance.onerror = (e) => updateStatus("Error: " + e.error);
+
+    setTimeout(() => {
         synth.speak(utterance);
-    }
+    }, 100);
 }
 
 speakBtn.addEventListener('click', speak);
-stopBtn.addEventListener('click', () => synth.cancel());
+resetBtn.addEventListener('click', forceReset);
 
-populateVoiceList();
+window.addEventListener('load', () => {
+    if ('speechSynthesis' in window) {
+        updateStatus("API Supported");
+    } else {
+        updateStatus("Not Supported");
+    }
+});
