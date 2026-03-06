@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Reader Pro</title>
+    <title>Voice Fix</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="card">
-        <h1>Voice Reader</h1>
-        <textarea id="text" placeholder="Type something..."></textarea>
+        <h2>Audio Debugger</h2>
+        <textarea id="text">Hello, testing the audio system.</textarea>
         
-        <div class="settings">
-            <select id="voice-select">
-                <option value="">Loading Voices...</option>
-            </select>
+        <div class="btns">
+            <button id="speak">Test Voice</button>
+            <button id="reset">Reset Engine</button>
         </div>
 
-        <div class="btns">
-            <button id="speak">Speak</button>
-            <button id="stop">Stop</button>
+        <div id="status-box">
+            Status: <span id="status">Ready</span>
         </div>
     </div>
     <script src="script.js"></script>
